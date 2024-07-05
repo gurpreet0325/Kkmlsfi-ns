@@ -1,5 +1,6 @@
 ﻿using Kkmlsfi_ns.API.Models.DTO;
 using Kkmlsfi_ns.API.Repository.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,7 @@ namespace Kkmlsfi_ns.API.Controllers
 
         [HttpPost]
         [Route("register")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             var user = new IdentityUser
