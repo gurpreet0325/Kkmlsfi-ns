@@ -1,0 +1,6 @@
+@Kkmlsfi_ns.API_HostAddress = http://localhost:5108
+
+GET {{Kkmlsfi_ns.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

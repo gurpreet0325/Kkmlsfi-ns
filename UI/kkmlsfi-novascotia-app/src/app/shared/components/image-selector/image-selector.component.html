@@ -1,0 +1,22 @@
+<div class="card mt-3">
+    <div class="card-header">
+        <h5 class="card-title">Upload display picture</h5>
+    </div>
+    <div class="card-body">
+        <div>
+            @if (memberDisplayPicture) {
+                <img src="{{memberDisplayPicture.url}}" alt="Member Display Picture" style="height: 100px;">
+            }
+        </div>
+        <div>
+            <form (submit)="uploadImage()">
+                <div class="mt-3">
+                    <input type="file" class="form-control" (change)="onFileUploadChange($event)">
+                </div>
+                <div class="mt-3 d-flex justify-content-end gap-1">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
