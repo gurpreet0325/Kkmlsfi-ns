@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MemberRequest } from '../models/member-request.model';
 import { Observable } from 'rxjs';
 import { Member } from '../models/member.model';
@@ -13,8 +13,32 @@ export class MemberService {
 
   constructor(private http: HttpClient) { }
 
-  getAllMembers(): Observable<Member[]> {
-    return this.http.get<Member[]>(`${environment.apiBaseUrl}/api/Members`);
+  getAllMembers(searchFilter?: string, sortBy?: string, sortDirection?: string, pageNumber?: number, pageSize?: number): Observable<Member[]> {
+    let params = new HttpParams();
+
+    if (searchFilter) {
+      params = params.set('searchFilter', searchFilter)
+    }
+
+    if (sortBy) {
+      params = params.set('sortBy', sortBy)
+    }
+
+    if (sortDirection) {
+      params = params.set('sortDirection', sortDirection)
+    }
+
+    if (pageNumber) {
+      params = params.set('pageNumber', pageNumber)
+    }
+
+    if (pageSize) {
+      params = params.set('pageSize', pageSize)
+    }
+
+    return this.http.get<Member[]>(`${environment.apiBaseUrl}/api/Members`, {
+      params: params
+    });
   }
 
   getMemberById(id: number): Observable<Member> {
@@ -22,14 +46,18 @@ export class MemberService {
   }
 
   addMember(model: MemberRequest): Observable<void> {
-    return this.http.post<void>(`${environment.apiBaseUrl}/api/Members`, model);
+    return this.http.post<void>(`${environment.apiBaseUrl}/api/Members?addAuth=true`, model);
   }
 
   updateMember(model: MemberRequest): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/api/Members/`, model);
+    return this.http.put<void>(`${environment.apiBaseUrl}/api/Members?addAuth=true`, model);
   }
 
   deleteMember(id: number) {
-    return this.http.delete<Member>(`${environment.apiBaseUrl}/api/Members/${id}`);
+    return this.http.delete<Member>(`${environment.apiBaseUrl}/api/Members/${id}?addAuth=true`);
+  }
+
+  getMemberTotalCount(): Observable<number> {
+    return this.http.get<number>(`${environment.apiBaseUrl}/api/Members/count`);
   }
 }

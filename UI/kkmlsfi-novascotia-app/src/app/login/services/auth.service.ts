@@ -49,6 +49,16 @@ export class AuthService {
     return undefined;
   }
 
+  isAdmin(): boolean {
+    const roles = localStorage.getItem('user-roles');
+
+    if (roles) {
+      return roles.includes('Writer');
+    }
+
+    return false;
+  }
+
   logout(): void {
     localStorage.clear();
     this.cookieService.delete('Authorization','/');

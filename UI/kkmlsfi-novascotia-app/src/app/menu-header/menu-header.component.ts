@@ -12,6 +12,7 @@ import { User } from '../login/models/user.model';
 })
 export class MenuHeaderComponent implements OnInit {
   user?: User;
+  isAdmin?: boolean;
 
   constructor(private authService: AuthService, private router: Router) {
 
@@ -22,10 +23,12 @@ export class MenuHeaderComponent implements OnInit {
     .subscribe({
       next: (response) => {
         this.user = response;
+        this.isAdmin = response?.roles.includes('Writer');
       }
     });
 
     this.user = this.authService.getUser();
+    this.isAdmin = this.authService.isAdmin();
   }
 
   onLogout(): void {

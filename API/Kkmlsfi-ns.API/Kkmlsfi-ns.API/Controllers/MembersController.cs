@@ -23,11 +23,15 @@ namespace Kkmlsfi_ns.API.Controllers
             this.mapper = mapper;
         }
 
-        //get api/members
+        //get api/members?searchFilter=name&sortBy=name&sortDirection=desc
         [HttpGet]
-        public async Task<IActionResult> GetAllMembers()
+        public async Task<IActionResult> GetAllMembers([FromQuery] string? searchFilter, 
+                                                       [FromQuery] string? sortBy, 
+                                                       [FromQuery] string? sortDirection,
+                                                       [FromQuery] int? pageNumber,
+                                                       [FromQuery] int? pageSize)
         {
-            var members = await memberRepository.GetAllMembersAsync();
+            var members = await memberRepository.GetAllMembersAsync(searchFilter, sortBy, sortDirection, pageNumber, pageSize);
             var response = members.Select(m=> mapper.Map<MemberDto>(m));
 
             return Ok(response);
@@ -113,6 +117,14 @@ namespace Kkmlsfi_ns.API.Controllers
             var response = mapper.Map<MemberDto>(member);
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetMembersTotalCount()
+        {
+            var totalCount = await memberRepository.GetTotalCount();
+            return Ok(totalCount);
         }
     }
 }

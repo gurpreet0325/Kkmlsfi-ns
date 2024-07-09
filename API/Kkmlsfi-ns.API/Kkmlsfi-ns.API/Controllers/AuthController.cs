@@ -71,6 +71,11 @@ namespace Kkmlsfi_ns.API.Controllers
                 //Add role to user
                 identityResult = await userManager.AddToRoleAsync(user, "Reader");
 
+                if (request.IsAdmin)
+                {
+                    identityResult = await userManager.AddToRoleAsync(user, "Writer");
+                }
+
                 if (identityResult.Succeeded)
                 {
                     return Ok();

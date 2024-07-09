@@ -12,15 +12,17 @@
                 <li class="nav-item"><a class="nav-link" routerLink="attendance" routerLinkActive="active">Attendance</a></li>
                 <li class="nav-item"><a class="nav-link" routerLink="tithes" routerLinkActive="active">Tithes</a></li> -->
                 
-                @if (user !== undefined && user.roles.includes('Writer')) {
+                @if (user !== undefined) {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Admin
                         </a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-item"><a class="nav-link" routerLink="admin/members" routerLinkActive="active">Members</a></li>
-                            <!-- <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                            @if (isAdmin === true) {
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-item"><a class="nav-link" routerLink="admin/register" routerLinkActive="active">Register</a></li>
+                            }
                         </ul>
                     </li>
                 }
@@ -35,9 +37,9 @@
                                 {{user.email}}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li class="dropdown-item"><a class="nav-link">Update Profile</a></li>
+                                <li class="dropdown-item"><a class="nav-link" role="button">Update Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li class="dropdown-item"><a class="nav-link" (click)="onLogout()">Log out</a></li>
+                                <li class="dropdown-item"><a class="nav-link" role="button" (click)="onLogout()">Log out</a></li>
                             </ul>
                         </li>
                     </ul>

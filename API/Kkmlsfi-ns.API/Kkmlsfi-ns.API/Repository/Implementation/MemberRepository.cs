@@ -14,9 +14,43 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Member>> GetAllMembersAsync()
+        public async Task<IEnumerable<Member>> GetAllMembersAsync(string? searchFilter = null, 
+                                                                  string? sortBy = null, 
+                                                                  string? sortDirection = null,
+                                                                  int? pageNumber = 1,
+                                                                  int? pageSize = 100)
         {
-            return await dbContext.Members.Where(m => !m.IsRemovedFromView).ToListAsync();
+            var members = dbContext.Members.Where(m => !m.IsRemovedFromView).AsQueryable();
+
+            //filter
+            if (!string.IsNullOrWhiteSpace(searchFilter))
+            {
+                members = members.Where(m => m.FirstName.Contains(searchFilter) || m.LastName.Contains(searchFilter));
+            }
+
+            //sort
+            var isAsc = string.Equals(sortDirection, "asc") ? true : false;
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                if (sortBy.Equals("First Name"))
+                {
+                    members = isAsc ? members.OrderBy(m => m.FirstName).ThenBy(m => m.LastName) : members.OrderByDescending(m => m.FirstName).ThenBy(m => m.LastName);
+                }
+                else if (sortBy.Equals("Last Name"))
+                {
+                    members = isAsc ? members.OrderBy(m => m.LastName).ThenBy(m => m.FirstName) : members.OrderByDescending(m => m.LastName).ThenBy(m => m.FirstName);
+                }
+            }
+            else
+            {
+                members = members.OrderBy(m => m.LastName).ThenBy(m => m.FirstName);
+            }
+
+            //paging
+            var skipResults = (pageNumber - 1) * pageSize;
+            members = members.Skip(skipResults ?? 0).Take(pageSize ?? 100);
+
+            return await members.ToListAsync();
         }
 
         public async Task<Member?> GetMemberByIdAsync(int memberId)
@@ -66,6 +100,11 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
             await dbContext.SaveChangesAsync();
 
             return existingMember;
+        }
+
+        public async Task<int> GetTotalCount()
+        {
+            return await dbContext.Members.CountAsync(m => !m.IsRemovedFromView);
         }
     }
 }
