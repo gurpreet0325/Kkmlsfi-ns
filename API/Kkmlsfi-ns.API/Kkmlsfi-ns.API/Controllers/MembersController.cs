@@ -5,6 +5,7 @@ using Kkmlsfi_ns.API.Models.DTO;
 using Kkmlsfi_ns.API.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
 
@@ -16,15 +17,18 @@ namespace Kkmlsfi_ns.API.Controllers
     {
         private readonly IMemberRepository memberRepository;
         private readonly IMapper mapper;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public MembersController(IMemberRepository memberRepository, IMapper mapper)
+        public MembersController(IMemberRepository memberRepository, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             this.memberRepository = memberRepository;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
 
-        //get api/members?searchFilter=name&sortBy=name&sortDirection=desc
+        //get api/members/GetAllMembers?searchFilter=name&sortBy=name&sortDirection=desc
         [HttpGet]
+        [Route("GetAllMembers")]
         public async Task<IActionResult> GetAllMembers([FromQuery] string? searchFilter, 
                                                        [FromQuery] string? sortBy, 
                                                        [FromQuery] string? sortDirection,
@@ -37,9 +41,9 @@ namespace Kkmlsfi_ns.API.Controllers
             return Ok(response);
         }
 
-        //get api/members/{id}
+        //get api/members/GetMemberById/{id}
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("GetMemberById/{id:int}")]
         public async Task<IActionResult> GetMemberById([FromRoute] int id)
         {
             var member = await memberRepository.GetMemberByIdAsync(id);
@@ -54,15 +58,16 @@ namespace Kkmlsfi_ns.API.Controllers
             return Ok(response);
         }
 
-        //post api/members
+        //post api/members/CreateMember
         [HttpPost]
+        [Route("CreateMember")]
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateMember(CreateMemberRequestDto request)
         {
             var member = mapper.Map<Member>(request);
 
-            member.InsertedBy = "gurpreet.pabla";
-            member.InsertedDate = DateTime.Now;
+            member.InsertedBy = request.UserEmail;
+            member.InsertedDate = request.ActionDateTime;
             member.IsRemovedFromView = false;
 
             await memberRepository.CreateAsync(member);
@@ -72,15 +77,16 @@ namespace Kkmlsfi_ns.API.Controllers
             return Ok(response);
         }
 
-        //put api/members
+        //put api/members/UpdateMember
         [HttpPut]
+        [Route("UpdateMember")]
         [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateMember(UpdateMemberRequestDto request)
         {
             var member = mapper.Map<Member>(request);
 
-            member.UpdatedBy = "gurpreet.pabla";
-            member.UpdatedDate = DateTime.Now;
+            member.UpdatedBy = request.UserEmail;
+            member.UpdatedDate = request.ActionDateTime;
 
             member = await memberRepository.UpdateAsync(member);
 
@@ -93,19 +99,16 @@ namespace Kkmlsfi_ns.API.Controllers
 
             return Ok(response);
         }
-        //delete api/Members
-        [HttpDelete]
-        [Route("{id:int}")]
+        //delete api/Members/DeleteMember
+        [HttpPut]
+        [Route("DeleteMember")]
         [Authorize(Roles = "Writer")]
-        public async Task<IActionResult> DeleteMember([FromRoute] int id)
+        public async Task<IActionResult> DeleteMember(UpdateMemberRequestDto request)
         {
-            var member = new Member
-            {
-                MemberId = id,
-                IsRemovedFromView = true,
-                UpdatedBy = "gurpreet.pabla",
-                UpdatedDate = DateTime.Now
-            };
+            var member = mapper.Map<Member>(request);
+
+            member.UpdatedBy = request.UserEmail;
+            member.UpdatedDate = request.ActionDateTime;
 
             member = await memberRepository.DeleteAsync(member);
 

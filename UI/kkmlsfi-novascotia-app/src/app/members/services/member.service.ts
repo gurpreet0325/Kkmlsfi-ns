@@ -36,26 +36,30 @@ export class MemberService {
       params = params.set('pageSize', pageSize)
     }
 
-    return this.http.get<Member[]>(`${environment.apiBaseUrl}/api/Members`, {
+    return this.http.get<Member[]>(`${environment.apiBaseUrl}/api/Members/GetAllMembers`, {
       params: params
     });
   }
 
   getMemberById(id: number): Observable<Member> {
-    return this.http.get<Member>(`${environment.apiBaseUrl}/api/Members/${id}`);
+    return this.http.get<Member>(`${environment.apiBaseUrl}/api/Members/GetMemberById/${id}`);
   }
 
   addMember(model: MemberRequest): Observable<void> {
-    return this.http.post<void>(`${environment.apiBaseUrl}/api/Members?addAuth=true`, model);
+    return this.http.post<void>(`${environment.apiBaseUrl}/api/Members/CreateMember?addAuth=true`, model);
   }
 
   updateMember(model: MemberRequest): Observable<void> {
-    return this.http.put<void>(`${environment.apiBaseUrl}/api/Members?addAuth=true`, model);
+    return this.http.put<void>(`${environment.apiBaseUrl}/api/Members/UpdateMember?addAuth=true`, model);
   }
 
-  deleteMember(id: number) {
-    return this.http.delete<Member>(`${environment.apiBaseUrl}/api/Members/${id}?addAuth=true`);
+  deleteMember(model: MemberRequest) {
+    return this.http.put<Member>(`${environment.apiBaseUrl}/api/Members/DeleteMember/?addAuth=true`, model);
   }
+
+  // deleteMember(id: number) {
+  //   return this.http.delete<Member>(`${environment.apiBaseUrl}/api/Members/${id}?addAuth=true`);
+  // }
 
   getMemberTotalCount(): Observable<number> {
     return this.http.get<number>(`${environment.apiBaseUrl}/api/Members/count`);

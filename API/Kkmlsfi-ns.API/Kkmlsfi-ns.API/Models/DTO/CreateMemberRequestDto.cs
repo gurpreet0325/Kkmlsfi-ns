@@ -11,5 +11,9 @@
         public DateOnly DateOfBirth { get; set; }
 
         public string City { get; set; } = null!;
+
+        public string UserEmail { get; set; } = null!;
+
+        public DateTime ActionDateTime { get; set; }
     }
 }

@@ -94,7 +94,7 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
                 return null;
             }
 
-            existingMember.IsRemovedFromView = member.IsRemovedFromView;
+            existingMember.IsRemovedFromView = true;
             existingMember.UpdatedBy = member.UpdatedBy;
             existingMember.UpdatedDate = member.UpdatedDate;
             await dbContext.SaveChangesAsync();

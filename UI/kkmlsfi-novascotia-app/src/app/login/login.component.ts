@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService} from 'ngx-cookie-service'
 import { Router, RouterLink } from '@angular/router';
+import { InputValidationMessageComponent } from '../shared/components/input-validation-message/input-validation-message.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, InputValidationMessageComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

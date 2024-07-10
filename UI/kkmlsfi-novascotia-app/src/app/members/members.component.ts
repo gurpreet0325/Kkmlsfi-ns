@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../login/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { defaultProperties, environment } from '../../environments/environment';
+import { MemberRequest } from './models/member-request.model';
 
 @Component({
   selector: 'app-members',
@@ -50,7 +51,16 @@ export class MembersComponent implements OnInit, OnDestroy {
   onDeleteMember(member: Member): void {
     if(confirm(`Are you sure to delete ${member.firstName} ${member.lastName}?`)) {
       if(member.memberId > 0) {
-        this.deleteMemberSubscription = this.memberService.deleteMember(member.memberId)
+        const memberRequest: MemberRequest = {
+          memberId: member.memberId,
+          firstName: member.firstName,
+          middleName: member.middleName,
+          lastName: member.lastName,
+          dateOfBirth: member.dateOfBirth,
+          city: member.city
+        };
+        this.setActionLog(memberRequest);
+        this.deleteMemberSubscription = this.memberService.deleteMember(memberRequest)
         .subscribe({
           next: (response) => {
             this.loadMembers(undefined,undefined,undefined,this.pageNumber,this.pageSize);
@@ -89,5 +99,11 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   private loadMembers(searchFilter?: string, sortBy?: string, sortDirection?: string, pageNumber?: number, pageSize?: number) {
     this.members$ = this.memberService.getAllMembers(searchFilter, sortBy, sortDirection, pageNumber, pageSize);
+  }
+
+  private setActionLog(memberRequest: MemberRequest) {
+    const userEmail = this.authService.getUser()?.email
+    memberRequest.userEmail = userEmail;
+    memberRequest.actionDateTime = new Date();
   }
 }

@@ -5,13 +5,15 @@ import { MemberService } from '../services/member.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImageSelectorComponent } from "../../shared/components/image-selector/image-selector.component";
+import { InputValidationMessageComponent } from '../../shared/components/input-validation-message/input-validation-message.component';
+import { AuthService } from '../../login/services/auth.service';
 
 @Component({
     selector: 'app-add-member',
     standalone: true,
     templateUrl: './add-member.component.html',
     styleUrl: './add-member.component.css',
-    imports: [FormsModule, ImageSelectorComponent]
+    imports: [FormsModule, ImageSelectorComponent, InputValidationMessageComponent]
 })
 export class AddMemberComponent implements OnDestroy, OnInit {
   model: MemberRequest = {
@@ -29,7 +31,7 @@ export class AddMemberComponent implements OnDestroy, OnInit {
   mode!: string;
   isImageSelectorVisible: boolean = false;
 
-  constructor(private memberService: MemberService,
+  constructor(private memberService: MemberService, private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute) {
   }
@@ -52,6 +54,7 @@ export class AddMemberComponent implements OnDestroy, OnInit {
   }
 
   onFormSubmit(){
+    this.setActionLog();
     if (this.isNew()) {
       this.addMemberSubscription = this.memberService.addMember(this.model)
       .subscribe({
@@ -108,6 +111,12 @@ export class AddMemberComponent implements OnDestroy, OnInit {
 
   closeImageSelector(): void {
     this.isImageSelectorVisible = false;
+  }
+
+  private setActionLog() {
+    const userEmail = this.authService.getUser()?.email
+    this.model.userEmail = userEmail;
+    this.model.actionDateTime = new Date();
   }
 
 }

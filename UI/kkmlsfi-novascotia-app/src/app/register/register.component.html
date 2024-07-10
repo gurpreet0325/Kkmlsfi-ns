@@ -6,17 +6,17 @@
             <form (submit)="onFormSubmit()">
                 <div class="mt-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" [(ngModel)]="model.email">
+                    <input type="text" class="form-control" id="email" name="email" [(ngModel)]="model.email" required email>
                 </div>
 
                 <div class="mt-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" [(ngModel)]="model.password">
+                    <input type="password" class="form-control" id="password" name="password" [(ngModel)]="model.password" required>
                 </div>
 
                 <div class="mt-3">
                     <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
                 </div>
 
                 <div class="mt-3">

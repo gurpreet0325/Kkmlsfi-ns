@@ -40,3 +40,7 @@ td {
   padding: 50px;
   background-color: rgba(0, 0, 0, .5);
 }
+
+input.ng-invalid.ng-touched {
+  border: red 1px solid;
+}
