@@ -39,7 +39,7 @@
                 </div>
                 
                 @if (isImageSelectorVisible) {
-                    <div class="images-container-modal">
+                    <div class="container-modal">
                         <button type="button" class="btn btn-danger" style="position: fixed; top: 10px; right: 10px;" (click)="closeImageSelector()">X</button>
                         <app-image-selector [member]="this.model"></app-image-selector>
                     </div>

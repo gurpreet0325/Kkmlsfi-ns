@@ -8,6 +8,8 @@
 
         public int MemberId { get; set; }
 
+        public bool HasAttended { get; set; }
+
         public string InsertedBy { get; set; } = null!;
 
         public DateTime InsertedDate { get; set; }

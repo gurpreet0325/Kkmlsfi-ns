@@ -9,6 +9,8 @@ import { MembersComponent } from './members/members.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { authGuard } from './guards/auth.guard';
+import { HomecellComponent } from './homecell/homecell.component';
+import { CheckinMembersComponent } from './attendance/checkin-members/checkin-members.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
@@ -16,6 +18,8 @@ export const routes: Routes = [
     { path: 'events', component: EventsComponent},
     { path: 'announcements', component: AnnouncementsComponent},
     { path: 'attendance', component: AttendanceComponent},
+    { path: 'attendance/members/:id', component: CheckinMembersComponent},
+    { path: 'homecell', component: HomecellComponent},
     { path: 'tithes', component: TithesComponent},
     { path: 'admin/members', component: MembersComponent},
     { path: 'admin/members/add', component: AddMemberComponent, canActivate: [authGuard]},

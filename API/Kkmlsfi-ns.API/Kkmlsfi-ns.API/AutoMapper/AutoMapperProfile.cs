@@ -12,6 +12,7 @@ namespace Kkmlsfi_ns.API.AutoMapper
             CreateMap<CreateMemberRequestDto, Member>();
             CreateMap<UpdateMemberRequestDto, Member>();
             CreateMap<MemberDisplayPicture, MemberDisplayPictureDto>();
+            CreateMap<MembersAttendance,MembersAttendanceDto>();
         }
     }
 }
