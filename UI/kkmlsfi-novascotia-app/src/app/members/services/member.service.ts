@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { MemberRequest } from '../models/member-request.model';
 import { Observable } from 'rxjs';
 import { Member } from '../models/member.model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 
 @Injectable({

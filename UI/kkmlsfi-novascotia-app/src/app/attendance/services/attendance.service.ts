@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MemberAttendance } from '../models/member-attendance.model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { AttendancesRequest } from '../models/attendance-request.model';
 import { Attendance } from '../models/attendance.model';
 import { MemberAttendanceRequest } from '../models/member-attendance-request.model';
