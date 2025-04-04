@@ -8,7 +8,19 @@
 
         public int MemberId { get; set; }
 
-        public bool HasAttended { get; set; }
+        public double Tithe { get; set; }
+
+        public double Offering { get; set; }
+
+        public double Mission { get; set; }
+
+        public double LoveGift { get; set; }
+
+        public double BuildingFund { get; set; }
+
+        public double Others { get; set; }
+
+        public string? Note { get; set; }
 
         public string InsertedBy { get; set; } = null!;
 

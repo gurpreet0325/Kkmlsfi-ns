@@ -9,8 +9,9 @@ namespace Kkmlsfi_ns.API.Repository.Interface
         Task<IEnumerable<MembersAttendance>> GetMembersAttendancesByIdAsync(int attendanceId);
         Task<Attendance> CreateAsync(Attendance attendance);
         Task<MembersAttendance> CreateMembersAttendanceAsync(MembersAttendance membersAttendance);
-        Task<Attendance> UpdateAsync(Attendance attendance);
+        Task<Attendance> UpdateAttendanceAsync(Attendance attendance);
         Task<MembersAttendance?> DeleteMembersAttendanceAsync(MembersAttendance membersAttendance);
         Task<MembersAttendance?> GetMembersAttendanceByIdAsync(int membersAttendanceId);
+        Task<MembersAttendance> UpdateMembersAttendanceAsync(MembersAttendance membersAttendance);
     }
 }

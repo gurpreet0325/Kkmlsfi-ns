@@ -23,8 +23,9 @@
                             {{attendance.attendanceDate | date:'longDate'}}
                             @if (!attendance.isFinalized) {
                                 <a class="btn btn-outline-primary border-0 ms-2" [routerLink]="['/attendance/members',attendance.attendanceId]"
-                                    data-toggle="tooltip" title="Check in Members">
-                                    <i class="bi bi-person-check-fill"></i>
+                                    data-toggle="tooltip" title="Check in Members/Tithes">
+                                    <i class="bi bi-person-fill"></i>
+                                    <i class="bi bi-envelope"></i>
                                 </a> 
                             } @else {
                                 <a class="btn btn-outline-success border-0 ms-2" [routerLink]="['/attendance/members',attendance.attendanceId]"

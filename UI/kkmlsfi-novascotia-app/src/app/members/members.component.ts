@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../login/services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { defaultProperties, environment } from '../../environments/environment';
+import { defaultProperties } from '../../environments/environment';
 import { MemberRequest } from './models/member-request.model';
 
 @Component({

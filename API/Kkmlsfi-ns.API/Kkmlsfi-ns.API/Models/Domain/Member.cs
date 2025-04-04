@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Http.HttpResults;
 namespace Kkmlsfi_ns.API.Models.Domain
 {
-    public class Member
+    public partial class Member
     {
         public int MemberId { get; set; }
 

@@ -7,6 +7,7 @@ import { AttendancesRequest } from '../models/attendance-request.model';
 import { Attendance } from '../models/attendance.model';
 import { MemberAttendanceRequest } from '../models/member-attendance-request.model';
 import { UpdateAttendanceRequest } from '../models/update-attendance-request.model';
+import { UpdateMembersAttendanceRequest } from '../models/update-member-attendance.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,9 @@ export class AttendanceService {
 
   updateAttendance(model: UpdateAttendanceRequest): Observable<void> {
     return this.http.put<void>(`${environment.apiBaseUrl}/api/Attendance/UpdateAttendance`, model);
+  }
+
+  updateMembersAttendance(model: UpdateMembersAttendanceRequest): Observable<void> {
+    return this.http.put<void>(`${environment.apiBaseUrl}/api/Attendance/UpdateMembersAttendance`, model);
   }
 }

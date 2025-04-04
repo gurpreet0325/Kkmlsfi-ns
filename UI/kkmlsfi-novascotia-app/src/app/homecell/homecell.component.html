@@ -1,1 +1,69 @@
-<p>homecell works!</p>
+<div class="container-fluid">
+    @if (isPopupOpen) {
+        <app-homecell-popup [mode]="mode"></app-homecell-popup>
+    }
+    <div class="mt-3">
+        <h3 class="float-start me-2">Homecells</h3>
+        @if (isAdmin) {
+            <a (click)="onAddHomecell()" class="btn btn-outline-primary border-0"
+                data-toggle="tooltip" title="Add New Homecell">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+        }
+        <div class="btn-toolbar float-end" role="toolbar">
+            <form (submit)="onSearch(searchFilter)">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search homecell" id="searchFilter" name="searchFilter" [(ngModel)]="searchFilter">
+                    <button type="submit" class="btn btn-success" 
+                        data-toggle="tooltip" title="Search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (homecells$ | async; as homecells) {
+        <table class="table table-hover mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>City</th>
+                    <th>Details</th>
+                    @if (isAdmin) {
+                        <th class="text-end"></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (homecell of homecells; track homecell.homecellId) {
+                    <tr>
+                        <td>{{homecell.homecellDate| date:'longDate'}}</td>
+                        <td>{{homecell.city}}</td>
+                        <td>
+                            Opening Prayer: <b>{{homecell.openingPrayerMemberName}}</b><br>
+                            Location: <b>{{homecell.placeMemberName}}</b><br>
+                            Teacher: <b>{{homecell.teacherMemberName}}</b><br>
+                            P&W: <b>{{homecell.praiseAndWorshipMembers}}</b>
+                        </td>
+                        @if (isAdmin) {
+                            <td class="text-end">
+                                <div>
+                                    <a (click)="onUpdateHomecell()"  class="btn btn-outline-warning border-0 me-2"
+                                        data-toggle="tooltip" title="Update">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    
+                                    <a (click)="onDeleteHomecell(homecell)" class="btn btn-outline-danger border-0" 
+                                        data-toggle="tooltip" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

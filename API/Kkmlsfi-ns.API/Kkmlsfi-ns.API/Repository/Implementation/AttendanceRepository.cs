@@ -37,7 +37,7 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
         public async Task<IEnumerable<MembersAttendance>> GetMembersAttendancesByIdAsync(int attendanceId)
         {
             var membersAttendance = dbContext.MembersAttendances
-                .Where(ma => ma.AttendanceId == attendanceId && ma.HasAttended)
+                .Where(ma => ma.AttendanceId == attendanceId && !ma.IsRemovedFromView)
                 .Include(ma => ma.Member);
 
             return await membersAttendance.ToListAsync();
@@ -57,7 +57,7 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
             return membersAttendance;
         }
 
-        public async Task<Attendance> UpdateAsync(Attendance attendance)
+        public async Task<Attendance> UpdateAttendanceAsync(Attendance attendance)
         {
             dbContext.Attendances.Update(attendance);
             await dbContext.SaveChangesAsync();
@@ -76,6 +76,13 @@ namespace Kkmlsfi_ns.API.Repository.Implementation
             var membersAttendance = await dbContext.MembersAttendances
                 .FirstOrDefaultAsync(ma => ma.MembersAttendanceId == membersAttendanceId);
 
+            return membersAttendance;
+        }
+
+        public async Task<MembersAttendance> UpdateMembersAttendanceAsync(MembersAttendance membersAttendance)
+        {
+            dbContext.MembersAttendances.Update(membersAttendance);
+            await dbContext.SaveChangesAsync();
             return membersAttendance;
         }
     }

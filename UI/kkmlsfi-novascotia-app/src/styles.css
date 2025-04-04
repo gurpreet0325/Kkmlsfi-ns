@@ -13,7 +13,6 @@ td {
   
 .dialog {
   width: 90%;
-  max-width: 30rem;
   min-height: 100px;
   max-height: 80%;
   border-radius: 6px;

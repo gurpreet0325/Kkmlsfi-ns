@@ -1,5 +1,5 @@
 <div class="backdrop"></div>
-<dialog class="dialog" open>
+<dialog class="dialog w-75" open>
     <form (submit)="onFormSubmit()">
         <h3>{{attendance?.attendanceDate | date:'longDate'}}</h3>
         @if (!attendance?.isFinalized) {
@@ -21,6 +21,16 @@
                     <tr>
                         <th>#</th>
                         <th>Full Name</th>
+                        @if (isAdmin) {
+                            <th style="width: 115px;">Tithe</th>
+                            <th style="width: 115px;">Offering</th>
+                            <th style="width: 115px;">Mission</th>
+                            <th style="width: 115px;">Love gift</th>
+                            <th style="width: 115px;">Building fund</th>
+                            <th style="width: 115px;">Others</th>
+                            <th style="width: 115px;">Note</th>
+                            <th class="text-end">Total</th>
+                        }
                         @if (!attendance?.isFinalized) {
                             <th class="text-end"></th>
                         }
@@ -31,6 +41,16 @@
                         <tr>
                             <td>{{$index + 1}}</td>
                             <td>{{member.fullName}}</td>
+                            @if (isAdmin) {
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.tithe" name="txtTithe" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.Tithe, member.tithe)"/></td>
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.offering" name="txtOffering" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.Offering, member.offering)"/></td>
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.mission" name="txtMission" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.Mission, member.mission)"/></td>
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.loveGift" name="txtLoveGift" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.LoveGift, member.loveGift)"/></td>
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.buildingFund" name="txtBuildingFund" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.LoveGift, member.buildingFund)"/></td>
+                                <td style="width: 115px;"><input class="form-control" type="number" [(ngModel)]="member.others" name="txtOthers" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.Others, member.others)"/></td>
+                                <td style="width: 115px;"><textarea class="form-control" type="text" rows="1" [(ngModel)]="member.note" name="txtNote" (blur)="onAddTithesAndOfferings(member.membersAttendanceId, valueType.Note, member.note)"> </textarea></td>
+                                <td class="text-end">$0,000.00</td>
+                            }
                             @if (!attendance?.isFinalized) {
                                 <td class="text-end">
                                     <a (click)="onDeleteMember(member)" class="btn btn-outline-danger border-0" 

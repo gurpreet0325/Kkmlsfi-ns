@@ -4,7 +4,7 @@ import { Observable, Subscription, tap } from 'rxjs';
 import { MemberAttendance } from '../models/member-attendance.model';
 import { AttendanceService } from '../services/attendance.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, UntypedFormBuilder } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Attendance } from '../models/attendance.model';
 import { MemberService } from '../../members/services/member.service';
 import { Member } from '../../members/models/member.model';
@@ -12,6 +12,7 @@ import { MemberAttendanceRequest } from '../models/member-attendance-request.mod
 import { AuthService } from '../../login/services/auth.service';
 import { formatDate } from 'date-fns';
 import { UpdateAttendanceRequest } from '../models/update-attendance-request.model';
+import { UpdateMembersAttendanceRequest, ValueTypes } from '../models/update-member-attendance.model';
 
 @Component({
   selector: 'app-checkin-members',
@@ -25,6 +26,9 @@ export class CheckinMembersComponent implements OnInit, OnDestroy {
   members$?: Observable<Member[]>;
   paramSubscription?: Subscription;
   attendance?: Attendance;
+  isAdmin: boolean = false;
+  valueType = ValueTypes;
+  userEmail = this.authService.getUser()?.email;
 
   constructor(private attendanceService: AttendanceService, 
     private memberService: MemberService,
@@ -39,6 +43,7 @@ export class CheckinMembersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.paramSubscription = this.route.paramMap.subscribe({
       next: (params) => {
         this.attendanceService.getAttendanceById(Number(params.get('id')))
@@ -89,7 +94,7 @@ export class CheckinMembersComponent implements OnInit, OnDestroy {
       const dateToday = new Date();
       const updatedAttendance: UpdateAttendanceRequest = {
         attendanceId: this.attendance.attendanceId,
-        userEmail: this.authService.getUser()?.email,
+        userEmail: this.userEmail,
         actionDateTime: dateToday,
         isRemovedFromView: false,
         isFinal: true
@@ -109,7 +114,7 @@ export class CheckinMembersComponent implements OnInit, OnDestroy {
       const memberAttendance: MemberAttendanceRequest = {
         attendanceId: this.attendance?.attendanceId,
         memberId: memberId,
-        userEmail: this.authService.getUser()?.email,
+        userEmail: this.userEmail,
         actionDateTime: dateToday
       };
       this.attendanceService.addMembersAttendance(memberAttendance)
@@ -119,6 +124,27 @@ export class CheckinMembersComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  onAddTithesAndOfferings(membersAttendanceId: number, valueType: number, value: any) {
+    console.log('start');
+    const membersAttendance: UpdateMembersAttendanceRequest = {
+      membersAttendanceId: membersAttendanceId,
+      valueType: valueType,
+      value: value,
+      note: value,
+      userEmail: this.userEmail,
+      actionDateTime: new Date()
+    };
+
+    console.log(membersAttendance);
+
+    this.attendanceService.updateMembersAttendance(membersAttendance)
+      .subscribe({
+        next: (response) => {
+          
+        }
+      });
   }
 
   private loadmembersAttendance(attendanceId: number)

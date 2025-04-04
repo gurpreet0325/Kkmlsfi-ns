@@ -13,5 +13,7 @@ namespace Kkmlsfi_ns.API.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<MembersAttendance> MembersAttendances { get; set; }
         public DbSet<MemberDisplayPicture> MemberDisplayPictures { get; set; }
+        public DbSet<Homecell> Homecells { get; set; }
+        public DbSet<HomecellPraiseAndWorshipMember> HomecellPraiseAndWorshipMembers { get; set; }
     }
 }

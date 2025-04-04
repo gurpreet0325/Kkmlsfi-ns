@@ -4,6 +4,7 @@ using Kkmlsfi_ns.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kkmlsfi_ns.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240729193948_HomecellDomain")]
+    partial class HomecellDomain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,8 +261,8 @@ namespace Kkmlsfi_ns.API.Migrations
                     b.Property<int>("AttendanceId")
                         .HasColumnType("int");
 
-                    b.Property<double>("BuildingFund")
-                        .HasColumnType("float");
+                    b.Property<bool>("HasAttended")
+                        .HasColumnType("bit");
 
                     b.Property<string>("InsertedBy")
                         .IsRequired()
@@ -271,26 +274,8 @@ namespace Kkmlsfi_ns.API.Migrations
                     b.Property<bool>("IsRemovedFromView")
                         .HasColumnType("bit");
 
-                    b.Property<double>("LoveGift")
-                        .HasColumnType("float");
-
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
-
-                    b.Property<double>("Mission")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Offering")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Others")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Tithe")
-                        .HasColumnType("float");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");

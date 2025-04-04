@@ -6,6 +6,7 @@ using Kkmlsfi_ns.API.Models.DTO;
 using Kkmlsfi_ns.API.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Kkmlsfi_ns.API.Models.Enums.Enums;
 
 namespace Kkmlsfi_ns.API.Controllers
 {
@@ -40,7 +41,14 @@ namespace Kkmlsfi_ns.API.Controllers
                                    MembersAttendanceId = m.MembersAttendanceId,
                                    AttendanceId = m.AttendanceId,
                                    MemberId = m.Member.MemberId,
-                                   FullName = string.IsNullOrEmpty(m.Member.MiddleName) ? $"{m.Member.LastName}, {m.Member.FirstName}" : $"{m.Member.LastName}, {m.Member.FirstName} {m.Member.MiddleName}"
+                                   FullName = string.IsNullOrEmpty(m.Member.MiddleName) ? $"{m.Member.LastName}, {m.Member.FirstName}" : $"{m.Member.LastName}, {m.Member.FirstName} {m.Member.MiddleName}",
+                                   Tithe = m.Tithe,
+                                   Offering = m.Offering,
+                                   Mission = m.Mission,
+                                   LoveGift = m.LoveGift,
+                                   BuildingFund = m.BuildingFund,
+                                   Others = m.Others,
+                                   Note = m.Note
                                };
 
                 return Ok(response.OrderBy(a => a.FullName));
@@ -65,7 +73,7 @@ namespace Kkmlsfi_ns.API.Controllers
                                AttendanceId = attendance.AttendanceId,
                                AttendanceDate = attendance.AttendanceDate,
                                IsFinalized = attendance.FinalizedDate != null,
-                               AttendedMembersCount = attendance.MembersAttendances.Count(m => m.HasAttended && !m.IsRemovedFromView)
+                               AttendedMembersCount = attendance.MembersAttendances.Count(m => !m.IsRemovedFromView)
                            };
 
             return Ok(response);
@@ -83,7 +91,7 @@ namespace Kkmlsfi_ns.API.Controllers
                                AttendanceId = att.AttendanceId,
                                AttendanceDate = att.AttendanceDate,
                                IsFinalized = att.FinalizedDate != null,
-                               AttendedMembersCount = att.MembersAttendances.Count(m => m.HasAttended && !m.IsRemovedFromView)
+                               AttendedMembersCount = att.MembersAttendances.Count(m => !m.IsRemovedFromView)
                            };
 
             return Ok(response);
@@ -126,7 +134,11 @@ namespace Kkmlsfi_ns.API.Controllers
                 InsertedBy = request.UserEmail,
                 InsertedDate = request.ActionDateTime,
                 IsRemovedFromView = false,
-                HasAttended = true
+                Tithe = 0,
+                Offering = 0,
+                Mission = 0,
+                BuildingFund = 0,
+                Others = 0
             };
 
             await attendanceRepository.CreateMembersAttendanceAsync(membersAttendance);
@@ -157,7 +169,7 @@ namespace Kkmlsfi_ns.API.Controllers
                 attendance.UpdatedBy = request.UserEmail;
                 attendance.UpdatedDate = request.ActionDateTime;
 
-                attendance = await attendanceRepository.UpdateAsync(attendance);
+                attendance = await attendanceRepository.UpdateAttendanceAsync(attendance);
 
                 var response = new AttendanceDto
                 {
@@ -181,6 +193,53 @@ namespace Kkmlsfi_ns.API.Controllers
             if (membersAttendance != null)
             {
                 await attendanceRepository.DeleteMembersAttendanceAsync(membersAttendance);
+
+                var response = mapper.Map<MembersAttendanceDto>(membersAttendance);
+                return Ok(response);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPut]
+        [Route("UpdateMembersAttendance")]
+        public async Task<IActionResult> UpdateMembersAttendance(UpdateMembersAttendanceRequestDto request)
+        {
+            var membersAttendance = await attendanceRepository.GetMembersAttendanceByIdAsync(request.MembersAttendanceId);
+
+            if (membersAttendance != null)
+            {
+                switch (request.ValueType)
+                {
+                    case ValueTypes.Tithe:
+                        membersAttendance.Tithe = request.Value;
+                        break;
+                    case ValueTypes.Offering:
+                        membersAttendance.Offering = request.Value;
+                        break;
+                    case ValueTypes.Mission:
+                        membersAttendance.Mission = request.Value;
+                        break;
+                    case ValueTypes.LoveGift:
+                        membersAttendance.LoveGift = request.Value;
+                        break;
+                    case ValueTypes.BuildingFund:
+                        membersAttendance.BuildingFund = request.Value;
+                        break;
+                    case ValueTypes.Others:
+                        membersAttendance.Others = request.Value;
+                        break;
+                    case ValueTypes.Note:
+                        membersAttendance.Note = request.Note;
+                        break;
+                    default:
+                        break;
+                }
+
+                membersAttendance.UpdatedBy = request.UserEmail;
+                membersAttendance.UpdatedDate = request.ActionDateTime;
+
+                membersAttendance = await attendanceRepository.UpdateMembersAttendanceAsync(membersAttendance);
 
                 var response = mapper.Map<MembersAttendanceDto>(membersAttendance);
                 return Ok(response);
